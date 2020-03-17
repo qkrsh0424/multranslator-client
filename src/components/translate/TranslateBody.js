@@ -17,6 +17,7 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import DeleteIcon from '@material-ui/icons/DeleteOutline';
 import CachedIcon from '@material-ui/icons/CachedOutlined';
+import AddIcon from '@material-ui/icons/AddOutlined';
 const Container = styled.div`
     padding:15px;
 `;
@@ -396,7 +397,7 @@ const TranslateBody = (props) => {
                 })}
                 <Grid item xs={12} sm={6}>
                     <AddTranslatorWrapper>
-                        <Button onClick={openAddTranslatorDial}>+</Button>
+                        <IconButton onClick={openAddTranslatorDial}><AddIcon/></IconButton>
                     </AddTranslatorWrapper>
                 </Grid>
             </Grid>
