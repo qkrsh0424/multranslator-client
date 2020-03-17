@@ -4,6 +4,11 @@ import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
 // uuid
 import {v4 as uuidv4} from 'uuid';
+
+// Core
+import Dialog from '@material-ui/core/Dialog';
+import Button from '@material-ui/core/Button';
+import Snackbar from '@material-ui/core/Snackbar';
 //Component
 import TranslateBody from './TranslateBody';
 
@@ -28,26 +33,71 @@ const TranslateMain = (props) => {
     })
 
     const [multipleTargetData, setMultipleTargetData] = useState([
-        {
-            id:uuidv4(),
-            classify:'google',
-            text: '',
-            language: 'ko'
-        },
-        {
-            id:uuidv4(),
-            classify:'papago',
-            text: '',
-            language: 'ko'
-        },
-        {
-            id:uuidv4(),
-            classify:'amazon',
-            text: '',
-            language: 'ko'
-        }
+        // {
+        //     id:uuidv4(),
+        //     classify:'google',
+        //     text: '',
+        //     language: 'ko'
+        // },
+        // {
+        //     id:uuidv4(),
+        //     classify:'papago',
+        //     text: '',
+        //     language: 'ko'
+        // },
+        // {
+        //     id:uuidv4(),
+        //     classify:'amazon',
+        //     text: '',
+        //     language: 'ko'
+        // }
     ])
+    const [addTranslatorDialOpen, setAddTranslatorDialOpen] = useState(false);
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState('');
 
+    useEffect(()=>{
+        userCheck();
+        initForm();
+        setMultipleTargetData(JSON.parse(localStorage.getItem('trans_list')));
+    },[])
+
+    const userCheck = ()=>{
+        if(localStorage.getItem('mulTrans_userId')){
+            return;
+        }else{
+            localStorage.setItem('mulTrans_userId', uuidv4());
+        }
+    }
+
+    const initForm = ()=>{
+        if(localStorage.getItem('trans_list')){
+            return;
+        }else{
+            localStorage.setItem('trans_list',JSON.stringify(
+                [
+                    {
+                        id:uuidv4(),
+                        classify:'google',
+                        text: '',
+                        language: 'ko'
+                    },
+                    {
+                        id:uuidv4(),
+                        classify:'papago',
+                        text: '',
+                        language: 'ko'
+                    },
+                    {
+                        id:uuidv4(),
+                        classify:'amazon',
+                        text: '',
+                        language: 'ko'
+                    }
+                ]
+            ));
+        }
+    }
     const handleRunTranslate = async () => {
         if(sourceData.text.length>4000 || sourceData.text.length<=0){
             return;
@@ -258,7 +308,66 @@ const TranslateMain = (props) => {
         }))
     }
 
+    const openAddTranslatorDial = ()=>{
+        setAddTranslatorDialOpen(true);
+    }
+    const closeAddTranslatorDial = ()=>{
+        setAddTranslatorDialOpen(false);
+    }
 
+    const handleAddNewTranslator = (type) =>{
+        switch(type){
+            case 'google':
+                addNewTranslatorToLocalStorage('google');
+                closeAddTranslatorDial();
+                break;
+            case 'papago':
+                addNewTranslatorToLocalStorage('papago');
+                closeAddTranslatorDial();
+                break;
+            case 'amazon':
+                addNewTranslatorToLocalStorage('amazon');
+                closeAddTranslatorDial();
+                break;
+            default:break;
+        }
+    }
+
+    const addNewTranslatorToLocalStorage = async(type) =>{
+        let array = JSON.parse(localStorage.getItem('trans_list'));
+        // console.log(array);
+        if(array.length>4){
+            return handleSnackbarOpen('번역기는 최대 5개만 추가 가능합니다.');
+        }else{
+            await array.push({
+                id:uuidv4(),
+                classify:type,
+                text: '',
+                language: 'ko'
+            })
+            // console.log(array);
+            await localStorage.setItem('trans_list',JSON.stringify(array));
+            await setMultipleTargetData(JSON.parse(localStorage.getItem('trans_list')));
+        }
+    }
+    const handleSnackbarOpen = (message) =>{
+        setSnackbarMessage(message);
+        setSnackbarOpen(true);
+    }
+    const handleSnackbarClose = () =>{
+        setSnackbarOpen(false);
+    }
+
+    const deleteTranslator = async(data)=>{
+        // console.log(data);
+        let array = JSON.parse(localStorage.getItem('trans_list'));
+        if(array.length<=1){
+            return handleSnackbarOpen('최소 하나의 번역기를 유지해야 합니다.');
+        }else{
+            await localStorage.setItem('trans_list',JSON.stringify(array.filter(idx=>idx.id!==data.id)));
+            await setMultipleTargetData(JSON.parse(localStorage.getItem('trans_list')));
+        }
+    }
     return (
         <div>
             <TranslateBody
@@ -267,12 +376,24 @@ const TranslateMain = (props) => {
                 multipleTargetData={multipleTargetData}
                 translatePopOpen={translatePopOpen}
                 translateAnchorEl={translateAnchorEl}
+                addTranslatorDialOpen={addTranslatorDialOpen}
 
                 handleTranslateClose={handleTranslateClose}
                 handleRunTranslate={handleRunTranslate}
                 handleSourceTextChange={handleSourceTextChange}
                 handleLanguageChange={handleLanguageChange}
                 handleExchangeLanguages={handleExchangeLanguages}
+                openAddTranslatorDial={openAddTranslatorDial}
+                deleteTranslator={deleteTranslator}
+                closeAddTranslatorDial={closeAddTranslatorDial}
+                handleAddNewTranslator={handleAddNewTranslator}
+            />
+            <Snackbar
+                open={snackbarOpen}
+                onClose={handleSnackbarClose}
+                transitionDuration={1000}
+                autoHideDuration={3000}
+                message={snackbarMessage}
             />
         </div>
     );

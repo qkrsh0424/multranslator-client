@@ -4,8 +4,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 //Core
-import Popper from '@material-ui/core/Popper';
-import Paper from '@material-ui/core/Paper';
+import Dialog from '@material-ui/core/Dialog';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
@@ -16,6 +15,7 @@ import IconButton from '@material-ui/core/IconButton';
 
 //Icons
 import CloseIcon from '@material-ui/icons/Close';
+import DeleteIcon from '@material-ui/icons/DeleteOutline';
 import CachedIcon from '@material-ui/icons/CachedOutlined';
 const Container = styled.div`
     padding:15px;
@@ -117,6 +117,16 @@ const TargetAmazonAreaWrapper = styled.div`
     }
     
 `;
+
+const AddTranslatorWrapper = styled.div`
+    margin:8px;
+    padding:15px;
+    border:1px solid #f1f1f1;
+    border-radius:15px;
+    box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075);
+    text-align:center;
+`;
+
 const LanguageSelectorWrapper = styled.div`
     margin:8px;
 `;
@@ -144,13 +154,28 @@ const TranslateButtonEl = styled.div`
 const FormControlEl = styled(FormControl)`
     width:100px;
 `;
+
+// FR is float right
+const DeleteIconButtonFREl = styled(IconButton)`
+    float:right;
+`;
+
+const AddTransButtonEl = styled(Button)`
+    margin:8px
+`;
+const FooterWrapper = styled.div`
+    text-align:center;
+    margin:50px 0;
+    font-family: 'Nanum Pen Script', cursive
+`
 const TranslateBody = (props) => {
     const {
         sourceData,
         targetData,
         multipleTargetData,
         translatePopOpen,
-        translateAnchorEl
+        translateAnchorEl,
+        addTranslatorDialOpen
     } = props
 
     const {
@@ -158,7 +183,11 @@ const TranslateBody = (props) => {
         handleRunTranslate,
         handleSourceTextChange,
         handleLanguageChange,
-        handleExchangeLanguages
+        handleExchangeLanguages,
+        openAddTranslatorDial,
+        deleteTranslator,
+        closeAddTranslatorDial,
+        handleAddNewTranslator
     } = props;
 
     return (
@@ -236,8 +265,11 @@ const TranslateBody = (props) => {
                     switch(target.classify){
                         case 'google':
                             return (
-                                <Grid item xs={12} sm={6}>
+                                <Grid item xs={12} sm={6} key={target.id}>
                                     <TargetGoogleAreaWrapper>
+                                        <DeleteIconButtonFREl onClick={()=>deleteTranslator(target)}>
+                                            <DeleteIcon/>
+                                        </DeleteIconButtonFREl>
                                         <h5 className='text-center'>구글 번역기 결과</h5>
                                         <LanguageSelectorWrapper>
                                             <FormControlEl>
@@ -276,8 +308,11 @@ const TranslateBody = (props) => {
                             );
                         case 'papago':
                             return(
-                                <Grid item xs={12} sm={6}>
+                                <Grid item xs={12} sm={6} key={target.id}>
                                     <TargetPapagoAreaWrapper>
+                                        <DeleteIconButtonFREl onClick={()=>deleteTranslator(target)}>
+                                            <DeleteIcon/>
+                                        </DeleteIconButtonFREl>
                                         <h5 className='text-center'>파파고 번역기 결과</h5>
                                         <LanguageSelectorWrapper>
                                             <FormControlEl>
@@ -316,8 +351,11 @@ const TranslateBody = (props) => {
                             );
                         case 'amazon':
                             return(
-                                <Grid item xs={12} sm={6}>
+                                <Grid item xs={12} sm={6} key={target.id}>
                                     <TargetAmazonAreaWrapper>
+                                        <DeleteIconButtonFREl onClick={()=>deleteTranslator(target)}>
+                                            <DeleteIcon/>
+                                        </DeleteIconButtonFREl>
                                         <h5 className='text-center'>아마존 번역기 결과</h5>
                                         <LanguageSelectorWrapper>
                                             <FormControlEl>
@@ -356,8 +394,26 @@ const TranslateBody = (props) => {
                             );
                     }
                 })}
+                <Grid item xs={12} sm={6}>
+                    <AddTranslatorWrapper>
+                        <Button onClick={openAddTranslatorDial}>+</Button>
+                    </AddTranslatorWrapper>
+                </Grid>
             </Grid>
-
+            <Dialog open={addTranslatorDialOpen} onClose={closeAddTranslatorDial}>
+                <div style={{padding:30}}>
+                    <AddTransButtonEl type='button' color={"primary"} variant={"outlined"} onClick={()=>handleAddNewTranslator('google')}>구글 번역기</AddTransButtonEl>
+                    <AddTransButtonEl type='button' color={"primary"} variant={"outlined"} onClick={()=>handleAddNewTranslator('papago')}>파파고 번역기</AddTransButtonEl>
+                    <AddTransButtonEl type='button' color={"primary"} variant={"outlined"} onClick={()=>handleAddNewTranslator('amazon')}>아마존 번역기</AddTransButtonEl>
+                </div>
+            </Dialog>
+            <FooterWrapper>
+                개발자 : 박세훈 qkrsh0424@gmail.com
+                <br/>
+                github client : https://github.com/qkrsh0424/multranslator-client.git
+                <br/>
+                github server : https://github.com/qkrsh0424/multranslator-server.git
+            </FooterWrapper>
         </Container>
     );
 }
