@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 //Axios
 import Axios from 'axios';
@@ -56,6 +56,7 @@ const TranslateMain = (props) => {
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
 
+    const [fontSizeMtl,setFontSizeMtl] = useState(20);
     useEffect(()=>{
         userCheck();
         initForm();
@@ -368,6 +369,30 @@ const TranslateMain = (props) => {
             await setMultipleTargetData(JSON.parse(localStorage.getItem('trans_list')));
         }
     }
+
+    const handleTextClear = async()=>{
+        setSourceData({
+            ...sourceData,
+            text:''
+        });
+    }
+
+    const handleChanegeFontSizeMtl = async(e, newVal)=>{
+        setFontSizeMtl(newVal);
+    }
+
+    const handleCopyToClipboard = async(target,e)=>{
+        if(target && target==='textArea-sourceCopy'){
+            document.getElementById(`textArea-sourceCopy`) ? document.getElementById(`textArea-sourceCopy`).select() : alert('error copy');
+        }else{
+            document.getElementById(`textArea-${target.id}`) ? document.getElementById(`textArea-${target.id}`).select() : alert('error copy');
+        }
+
+        if(document.execCommand('copy')){
+            handleSnackbarOpen('COPIED!')
+        }
+    }
+
     return (
         <div>
             <TranslateBody
@@ -377,6 +402,7 @@ const TranslateMain = (props) => {
                 translatePopOpen={translatePopOpen}
                 translateAnchorEl={translateAnchorEl}
                 addTranslatorDialOpen={addTranslatorDialOpen}
+                fontSizeMtl={fontSizeMtl}
 
                 handleTranslateClose={handleTranslateClose}
                 handleRunTranslate={handleRunTranslate}
@@ -387,6 +413,9 @@ const TranslateMain = (props) => {
                 deleteTranslator={deleteTranslator}
                 closeAddTranslatorDial={closeAddTranslatorDial}
                 handleAddNewTranslator={handleAddNewTranslator}
+                handleTextClear={handleTextClear}
+                handleChanegeFontSizeMtl={handleChanegeFontSizeMtl}
+                handleCopyToClipboard={handleCopyToClipboard}
             />
             <Snackbar
                 open={snackbarOpen}
