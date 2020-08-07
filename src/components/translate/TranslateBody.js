@@ -20,6 +20,10 @@ import DeleteIcon from '@material-ui/icons/DeleteOutline';
 import CachedIcon from '@material-ui/icons/CachedOutlined';
 import AddIcon from '@material-ui/icons/AddOutlined';
 import FileCopyIcon from '@material-ui/icons/FileCopyOutlined';
+
+// Components
+import UpdateNoteBody from './UpdateNoteBody';
+
 const Container = styled.div`
     padding:15px;
 `;
@@ -47,6 +51,19 @@ const LeftAreaFooter = styled.div`
     }
     .mtl-float-right{
         float:right;
+    }
+
+    .mtl-text-many{
+        font-size: 14px;
+        font-weight:800;
+        padding:8px;
+        margin:12px 5px;
+    }
+
+    .mtl-text-clear{
+        font-size: 14px;
+        padding:8px;
+        margin:12px 5px;
     }
 `;
 const RightAreaWrapper = styled.div`
@@ -171,6 +188,17 @@ const TargetTextArea = styled.textarea`
 
 const TranslateButtonEl = styled.div`
     text-align:center;
+    // float:right;
+`;
+
+const TranslateButton = styled.button`
+    font-size:20px;
+    margin-bottom:25px;
+    padding: 15px 45px;
+    font-weight:800;
+    background:#7facff59;
+    border-radius:15px;
+    color:#696666;
 `;
 
 const FormControlEl = styled(FormControl)`
@@ -192,7 +220,8 @@ const FooterWrapper = styled.div`
 `
 
 const CopyButton = styled.button`
-    float:right
+    float:right;
+    margin:12px;
 `
 const TranslateBody = (props) => {
     const {
@@ -241,54 +270,66 @@ const TranslateBody = (props) => {
                 <Grid item xs={12} sm={12}>
                     <LeftAreaWrapper className='clearfix'>
                         <h5 className='text-center'>내용</h5>
-
                         <LanguageSelectorWrapper>
-                            <CopyButton onClick={(e)=>handleCopyToClipboard('textArea-sourceCopy',e)}>Copy</CopyButton>
-                            <FormControlEl>
-                                <InputLabel id="demo-simple-select-label">소스 언어</InputLabel>
-                                <Select
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    value={sourceData.language}
-                                    onChange={(e) => handleLanguageChange('source', e)}
-                                >
-                                    <MenuItem value={'ko'}>한국어</MenuItem>
-                                    <MenuItem value={'en'}>영어</MenuItem>
-                                    <MenuItem value={'zh-CN'}>중국어간체</MenuItem>
-                                    <MenuItem value={'ja'}>일본어</MenuItem>
-                                    <MenuItem value={'vi'}>베트남어</MenuItem>
-                                    <MenuItem value={'de'}>독일어</MenuItem>
-                                    <MenuItem value={'es'}>스페인어</MenuItem>
-                                    <MenuItem value={'ru'}>러시아어</MenuItem>
-                                    <MenuItem value={'it'}>이탈리아어</MenuItem>
-                                    <MenuItem value={'fr'}>프랑스어</MenuItem>
-                                    {/* <MenuItem value={'zh-TW'}>중국어번체</MenuItem> */}
-                                </Select>
-                            </FormControlEl>
-                            <IconButton onClick={() => handleExchangeLanguages(sourceData.language, targetData.language)}>
-                                <CachedIcon />
-                            </IconButton>
-                            <FormControlEl>
-                                <InputLabel id="demo-simple-select-label">루트 타겟 언어</InputLabel>
-                                <Select
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    value={targetData.language}
-                                    onChange={(e) => handleLanguageChange('target', e)}
-                                >
-                                    <MenuItem value={'ko'}>한국어</MenuItem>
-                                    <MenuItem value={'en'}>영어</MenuItem>
-                                    <MenuItem value={'zh-CN'}>중국어간체</MenuItem>
-                                    <MenuItem value={'ja'}>일본어</MenuItem>
-                                    <MenuItem value={'vi'}>베트남어</MenuItem>
-                                    <MenuItem value={'de'}>독일어</MenuItem>
-                                    <MenuItem value={'es'}>스페인어</MenuItem>
-                                    <MenuItem value={'ru'}>러시아어</MenuItem>
-                                    <MenuItem value={'it'}>이탈리아어</MenuItem>
-                                    <MenuItem value={'fr'}>프랑스어</MenuItem>
-                                    {/* <MenuItem value={'zh-TW'}>중국어번체</MenuItem> */}
-                                </Select>
-                            </FormControlEl>
+                            <Grid container spacing={3}>
+                                <Grid item xs={12} sm={6}>
+                                    <div style={{ textAlign: "center" }}>
+                                        <FormControlEl>
+                                            <InputLabel id="demo-simple-select-label" style={{ display: "inlineBlock" }}>소스 언어</InputLabel>
+                                            <Select
+                                                labelId="demo-simple-select-label"
+                                                id="demo-simple-select"
+                                                value={sourceData.language}
+                                                onChange={(e) => handleLanguageChange('source', e)}
+                                            >
+                                                <MenuItem value={'ko'}>한국어</MenuItem>
+                                                <MenuItem value={'en'}>영어</MenuItem>
+                                                <MenuItem value={'zh-CN'}>중국어간체</MenuItem>
+                                                <MenuItem value={'ja'}>일본어</MenuItem>
+                                                <MenuItem value={'vi'}>베트남어</MenuItem>
+                                                <MenuItem value={'de'}>독일어</MenuItem>
+                                                <MenuItem value={'es'}>스페인어</MenuItem>
+                                                <MenuItem value={'ru'}>러시아어</MenuItem>
+                                                <MenuItem value={'it'}>이탈리아어</MenuItem>
+                                                <MenuItem value={'fr'}>프랑스어</MenuItem>
+                                                {/* <MenuItem value={'zh-TW'}>중국어번체</MenuItem> */}
+                                            </Select>
+                                        </FormControlEl>
+                                        <IconButton onClick={() => handleExchangeLanguages(sourceData.language, targetData.language)}>
+                                            <CachedIcon />
+                                        </IconButton>
+                                        <FormControlEl>
+                                            <InputLabel id="demo-simple-select-label">타겟 언어</InputLabel>
+                                            <Select
+                                                labelId="demo-simple-select-label"
+                                                id="demo-simple-select"
+                                                value={targetData.language}
+                                                onChange={(e) => handleLanguageChange('target', e)}
+                                            >
+                                                <MenuItem value={'ko'}>한국어</MenuItem>
+                                                <MenuItem value={'en'}>영어</MenuItem>
+                                                <MenuItem value={'zh-CN'}>중국어간체</MenuItem>
+                                                <MenuItem value={'ja'}>일본어</MenuItem>
+                                                <MenuItem value={'vi'}>베트남어</MenuItem>
+                                                <MenuItem value={'de'}>독일어</MenuItem>
+                                                <MenuItem value={'es'}>스페인어</MenuItem>
+                                                <MenuItem value={'ru'}>러시아어</MenuItem>
+                                                <MenuItem value={'it'}>이탈리아어</MenuItem>
+                                                <MenuItem value={'fr'}>프랑스어</MenuItem>
+                                                {/* <MenuItem value={'zh-TW'}>중국어번체</MenuItem> */}
+                                            </Select>
+                                        </FormControlEl>
+                                    </div>
+
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <TranslateButtonEl>
+                                        {/* <Button variant='outlined' onClick={handleRunTranslate}>번역하기</Button> */}
+                                        <TranslateButton variant='outlined' onClick={handleRunTranslate}>번역하기</TranslateButton>
+                                    </TranslateButtonEl>
+
+                                </Grid>
+                            </Grid>
                         </LanguageSelectorWrapper>
                         <LeftTextArea
                             // ref={textAreaRef}
@@ -301,35 +342,40 @@ const TranslateBody = (props) => {
                         </LeftTextArea>
                         {/* <span className='float-left text-danger warningText'>*현재는 200자 한정으로 번역을 지원하고 있습니다.</span> */}
                         <LeftAreaFooter>
-                            <span className='mtl-float-left textLength'>{sourceData.text.length}/4000</span>
+                            <span className='mtl-float-left mtl-text-many textLength'>{sourceData.text.length} / 4000</span>
                             <Button
                                 type='button'
-                                className='mtl-float-right'
+                                className='mtl-float-left mtl-text-clear'
                                 variant='outlined'
-                                color='primary'
+                                color='secondary'
                                 onClick={handleTextClear}
-                            >모두 지우기</Button>
+                            >Clear</Button>
+                            <CopyButton onClick={(e) => handleCopyToClipboard('textArea-sourceCopy', e)}>Copy</CopyButton>
                         </LeftAreaFooter>
 
                     </LeftAreaWrapper>
                 </Grid>
                 <Grid item xs={12} sm={12}>
-                    <TranslateButtonEl>
-                        <Button variant='outlined' onClick={handleRunTranslate}>번역하기</Button>
-                    </TranslateButtonEl>
+                    {/* <Button
+                        type='button'
+                        className='mtl-float-right'
+                        variant='outlined'
+                        color='primary'
+                        onClick={handleTextClear}
+                    >모두 지우기</Button> */}
+                    {/* <hr/> */}
                 </Grid>
                 {multipleTargetData && multipleTargetData.map((target, index) => {
                     switch (target.classify) {
                         case 'google':
                             return (
                                 <Grid item xs={12} sm={6} key={target.id}>
-                                    <TargetGoogleAreaWrapper>
+                                    <TargetGoogleAreaWrapper className="clearfix">
                                         <DeleteIconButtonFREl onClick={() => deleteTranslator(target)}>
                                             <DeleteIcon />
                                         </DeleteIconButtonFREl>
                                         <h5 className='text-center'>구글 번역기 결과</h5>
                                         <LanguageSelectorWrapper>
-                                            <CopyButton onClick={(e)=>handleCopyToClipboard(target,e)}>Copy</CopyButton>
                                             <FormControlEl>
                                                 <InputLabel id="demo-simple-select-label">타겟 언어</InputLabel>
                                                 <Select
@@ -356,12 +402,15 @@ const TranslateBody = (props) => {
                                             id={`textArea-${target.id}`}
                                             value={target.text}
                                             placeholder={`${target.classify} translator...`}
-                                            // readOnly
+                                            readOnly
                                             style={{ fontSize: `${fontSizeMtl}px` }}
                                         >
 
                                         </TargetTextArea>
-                                        <a href='https://translate.google.com/' target="_blank">출처 : 구글</a>
+                                        <LeftAreaFooter>
+                                            <a href='https://translate.google.com/' target="_blank">출처 : 구글</a>
+                                            <CopyButton onClick={(e) => handleCopyToClipboard(target, e)}>Copy</CopyButton>
+                                        </LeftAreaFooter>
                                     </TargetGoogleAreaWrapper>
                                 </Grid>
                             );
@@ -374,7 +423,7 @@ const TranslateBody = (props) => {
                                         </DeleteIconButtonFREl>
                                         <h5 className='text-center'>파파고 번역기 결과</h5>
                                         <LanguageSelectorWrapper>
-                                            <CopyButton onClick={(e)=>handleCopyToClipboard(target,e)}>Copy</CopyButton>
+
                                             <FormControlEl>
                                                 <InputLabel id="demo-simple-select-label">타겟 언어</InputLabel>
                                                 <Select
@@ -401,12 +450,16 @@ const TranslateBody = (props) => {
                                             id={`textArea-${target.id}`}
                                             value={target.text}
                                             placeholder={`${target.classify} translator...`}
-                                            // readOnly
+                                            readOnly
                                             style={{ fontSize: `${fontSizeMtl}px` }}
                                         >
 
                                         </TargetTextArea>
-                                        <a href='https://papago.naver.com/' target="_blank">출처 : 네이버 파파고</a>
+
+                                        <LeftAreaFooter>
+                                            <a href='https://papago.naver.com/' target="_blank">출처 : 네이버 파파고</a>
+                                            <CopyButton onClick={(e) => handleCopyToClipboard(target, e)}>Copy</CopyButton>
+                                        </LeftAreaFooter>
                                     </TargetPapagoAreaWrapper>
                                 </Grid>
                             );
@@ -419,7 +472,6 @@ const TranslateBody = (props) => {
                                         </DeleteIconButtonFREl>
                                         <h5 className='text-center'>아마존 번역기 결과</h5>
                                         <LanguageSelectorWrapper>
-                                            <CopyButton onClick={(e)=>handleCopyToClipboard(target,e)}>Copy</CopyButton>
                                             <FormControlEl>
                                                 <InputLabel id="demo-simple-select-label">타겟 언어</InputLabel>
                                                 <Select
@@ -446,12 +498,16 @@ const TranslateBody = (props) => {
                                             id={`textArea-${target.id}`}
                                             value={target.text}
                                             placeholder={`${target.classify} translator...`}
-                                            // readOnly
+                                            readOnly
                                             style={{ fontSize: `${fontSizeMtl}px` }}
                                         >
 
                                         </TargetTextArea>
-                                        <a href='https://aws.amazon.com/translate/' target="_blank">출처 : AWS</a>
+
+                                        <LeftAreaFooter>
+                                            <a href='https://aws.amazon.com/translate/' target="_blank">출처 : AWS</a>
+                                            <CopyButton onClick={(e) => handleCopyToClipboard(target, e)}>Copy</CopyButton>
+                                        </LeftAreaFooter>
                                     </TargetAmazonAreaWrapper>
                                 </Grid>
                             );
@@ -470,8 +526,12 @@ const TranslateBody = (props) => {
                     <AddTransButtonEl type='button' color={"primary"} variant={"outlined"} onClick={() => handleAddNewTranslator('amazon')}>아마존 번역기</AddTransButtonEl>
                 </div>
             </Dialog>
+            <hr />
+            <UpdateNoteBody
+
+            />
             <FooterWrapper>
-                개발사 : PCY / 개발자 : 박세훈 qkrsh0424@gmail.com
+                개발사 : PCY / 개발자 연락처: 박세훈 pcysynabro.ads@gmail.com
                 <br />
                 github client : https://github.com/qkrsh0424/multranslator-client.git
                 <br />

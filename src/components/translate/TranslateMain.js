@@ -390,6 +390,7 @@ const TranslateMain = (props) => {
 
         if(document.execCommand('copy')){
             handleSnackbarOpen('COPIED!')
+            e.target.focus();
         }
     }
 

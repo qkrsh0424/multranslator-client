@@ -23,6 +23,10 @@ const NavContainer = styled.div`
         height:75px;
     }
 `;
+
+const MtlNavLink = styled.a`
+    color:red;
+`
 const NavBody = (props) => {
     return (
         <NavContainer>
@@ -32,10 +36,15 @@ const NavBody = (props) => {
                         {/* <IconButton edge="start" color="inherit" aria-label="menu">
                             <MenuIcon />
                         </IconButton> */}
-                        <Typography variant="h6"><img src='/NavLogoMultranslator.jpg' width={150} height={75}/></Typography>
+                        <Typography variant="h6">
+                            <img src='/NavLogoMultranslator.jpg' width={150} height={75}/>
+                        </Typography>
                     </Toolbar>
+                    
                 </AppBar>
+                
             </HideOnScroll>
+            
         </NavContainer>
     );
 }
